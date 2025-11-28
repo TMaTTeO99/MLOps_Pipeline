@@ -36,9 +36,9 @@ const CsvUploader = () => {
     setStatus('uploading');
     const formData = new FormData();
     formData.append('file_csv', file); 
-
+    console.log('Invio file:', file);
     try {
-      const response = await fetch('http://localhost:3000/api/upload', {
+      const response = await fetch('http://localhost:5000/api/upload', {
         method: 'POST',
         body: formData,
       });
@@ -56,7 +56,6 @@ const CsvUploader = () => {
   };
 
   return (
-    // Ho rimosso 'mt: 8' qui perché ci penserà la Home a centrare tutto
     <Container maxWidth="sm"> 
       <Paper elevation={3} sx={{ p: 4, textAlign: 'center' }}>
         

@@ -1,5 +1,5 @@
-from flask import Flask, request, jsonify
-from Service.DataService import csv_to_dataframe
+from flask import Flask, request, jsonify, current_app
+from Service.DataService import csv_to_dataframe, save_dataset
 from flask_cors import CORS
 
 
@@ -19,13 +19,24 @@ def upload_file():
 
     file = request.files['file_csv']
 
+    current_app.logger.info(f"Ricevuto file: {file}")
+
     if file.filename == '':
         return jsonify({"error": "Nessun file selezionato"}), 400
 
     if not file.filename.endswith('.csv'):
         return jsonify({"error": "Il file deve essere un .csv"}), 400
 
-    return jsonify(csv_to_dataframe(file)), 200
+    response_data, df_cleaned = csv_to_dataframe(file)
+    
+    if response_data is None:
+        return jsonify({"error": "Errore nell'elaborazione del file"}), 500
+    
+    file_path = save_dataset(df_cleaned, file.filename)
+    
+    response_data.update({"file_path": file_path})
+
+    return jsonify(response_data), 200
     
     
 def get_app():

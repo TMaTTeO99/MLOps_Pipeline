@@ -15,4 +15,4 @@ In the current folder there is a Dockerfile to build a docker container. The use
 2. Run : docker build -t < image-name > .
 
 ### To run a docker container follow these instructions:
-1. Run: docker run -p 5000:5000 -d < image-name >
+1. docker run -p 5000:5000 -v "$(pwd)/datasets_storage:/app/datasets" < image-name >
